@@ -27,7 +27,7 @@ void writeEEPROM(int addr, byte data) {
   PORTA = data;
   delayMicroseconds(1);
   digitalWrite(WE, HIGH);
-  delay(10);
+  /* delay(10); */
 }
 
 byte readEEPROM(int addr) {
@@ -62,7 +62,7 @@ void setup() {
     writeEEPROM(address, data[address]);
   }
   for (word address = sizeof(data); (address <= s); address++) {
-    writeEEPROM(address, 0xea);
+    writeEEPROM(address, 0x00); // NOP = 0x00
   }
   while (readEEPROM(s) != readEEPROM(s)) {
     Serial.print(".");
