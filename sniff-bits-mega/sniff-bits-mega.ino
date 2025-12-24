@@ -6,9 +6,7 @@
 
 byte sniffData() {
   DDRL = 0x00;
-  byte data = 0x00;
-  data = PINL;
-  return data;
+  return PINL;
 }
 word sniffAddress() {
   DDRA = 0x00;
@@ -30,13 +28,8 @@ void onClock() {
 
 void setup() {
   Serial.begin(57600);
-  while (!Serial)
-    ;
-
-  DDRA = 0x00;
-  DDRC = 0x00;
-  DDRL = 0x00;
-
+  while (!Serial);
+  DDRL = DDRC = DDRA = 0x00;
   attachInterrupt(digitalPinToInterrupt(SYNC),onClock,FALLING);
 }
 
