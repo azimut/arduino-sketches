@@ -56,7 +56,7 @@ void setup() {
   /* Serial.println(" done"); */
 
   printContents();
-  Serial.print("Programming...");
+  Serial.print("Programming ...");
   for (word address = 0; (address < sizeof(data)); address++) {
     // Wait after each TBLCO (Byte Load Cycle Time)
     if (address != 0 && address % 128 == 0) {
@@ -66,10 +66,10 @@ void setup() {
     }
     writeEEPROM(address, data[address]);
   }
-  int s = 127;
-  /* for (word address = sizeof(data); (address <= s); address++) { */
-  /*   writeEEPROM(address, 0x00); // NOP = 0x00 */
-  /* } */
+  // Padding
+  for (word address = sizeof(data); address % 16 != 0; address++) {
+    writeEEPROM(address, 0x00); // NOP = 0x00
+  }
   Serial.println(" done");
   delay(100);
   printContents();
