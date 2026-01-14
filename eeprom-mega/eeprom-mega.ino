@@ -80,15 +80,15 @@ void loop() {
 
 void printContents() {
   for (int base = 0; base <= 255; base += 16) {
-    byte data[16];
+    byte bdata[16];
     for (int offset = 0; offset <= 15; offset += 1) {
-      data[offset] = readEEPROM(base + offset);
+      bdata[offset] = readEEPROM(base + offset);
     }
-    char buf[80];
-    sprintf(buf, "%03x:  %02x %02x %02x %02x %02x %02x %02x %02x   %02x %02x %02x %02x %02x %02x %02x %02x",
-            base, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7],
-            data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]);
-    Serial.println(buf);
+    char sbuf[80];
+    sprintf(sbuf, "%03x:  %02x %02x %02x %02x %02x %02x %02x %02x   %02x %02x %02x %02x %02x %02x %02x %02x",
+            base, bdata[0], bdata[1], bdata[2], bdata[3], bdata[4], bdata[5], bdata[6], bdata[7],
+            bdata[8], bdata[9], bdata[10], bdata[11], bdata[12], bdata[13], bdata[14], bdata[15]);
+    Serial.println(sbuf);
   }
 }
 
