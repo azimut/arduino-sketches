@@ -1,17 +1,23 @@
-#define WE 20
-#define OE 21
+#define NBLOCKS 3
 
-byte dataBits[] = {49,48,47,46,45,44,43,42}; // PORT L
-byte addrBits[] = {22,23,24,25,26,27,28,29}; // PORT A
+#define WE 4
+#define OE 3
 
-void setAddress(byte addr) {
+#define PORTA_PINS 22,23,24,25,26,27,28,29
+#define PORTL_PINS 49,48,47,46,45,44,43,42
+#define PORTC_PINS 37,36,35,34,33,32,31,30
+
+byte dataBits[] = {PORTA_PINS};
+byte addrBits[] = {PORTC_PINS,PORTL_PINS};
+
+void setAddress(word addr) {
   for (int i = 0; i < sizeof(addrBits); ++i) {
     digitalWrite(addrBits[i], addr & 0x01);
     addr = addr >> 1;
   }
 }
 
-byte readEEPROM(byte addr) {
+byte readEEPROM(word addr) {
   byte data = 0x00;
   setAddress(addr);
   digitalWrite(WE, HIGH);
@@ -25,7 +31,7 @@ byte readEEPROM(byte addr) {
 }
 
 void printContents() {
-  for (int base = 0; base <= 255; base += 16) {
+  for (int base = 0; base <= (NBLOCKS * 127)+1; base += 16) {
     byte data[16];
     for (int offset = 0; offset <= 15; offset += 1) {
       data[offset] = readEEPROM(base + offset);
@@ -58,7 +64,7 @@ void setup() {
   Serial.begin(57600);
   while (!Serial)
     ;
-  Serial.println("reading...");
+  Serial.println("serial reading...");
   delay(100);
   printContents();
   Serial.println("done!");

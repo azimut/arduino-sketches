@@ -1,24 +1,27 @@
-#define WE 20
-#define OE 21
+#define NBLOCKS 3
+#define WE 4
+#define OE 3
 
-void setAddress(byte addr) {
-  DDRA = 0xFF;
-  PORTA = addr;
+void setAddress(word addr) {
+  DDRC = 0xff;
+  DDRL = 0xff; // 1 = OUTPUT
+  PORTC = (addr >> 0) & 0x00ff;
+  PORTL = (addr >> 8) & 0x00ff;
 }
 
-byte readEEPROM(byte addr) {
+byte readEEPROM(word addr) {
   byte data = 0x00;
-  DDRL = 0x00;
+  DDRA = 0x00;
   setAddress(addr);
   digitalWrite(WE, HIGH);
   digitalWrite(OE, LOW);
-  data = PINL;
+  data = PINA;
   digitalWrite(OE, HIGH);
   return data;
 }
 
 void printContents() {
-  for (int base = 0; base <= 255; base += 16) {
+  for (int base = 0; base <= (NBLOCKS * 127)+1; base += 16) {
     byte data[16];
     for (int offset = 0; offset <= 15; offset += 1) {
       data[offset] = readEEPROM(base + offset);
@@ -41,13 +44,13 @@ void setup() {
   pinMode(OE, OUTPUT);
   digitalWrite(OE, HIGH);
 
-  DDRL = 0x00; // INPUT  DATA
-  DDRA = 0xFF; // OUTPUT ADDR
+  DDRA = 0x00; // INPUT  DATA
+  DDRC = 0xFF; // OUTPUT ADDR
 
   Serial.begin(57600);
   while (!Serial)
     ;
-  Serial.println("reading...");
+  Serial.println("port reading...");
   delay(100);
   printContents();
   Serial.println("done!");
