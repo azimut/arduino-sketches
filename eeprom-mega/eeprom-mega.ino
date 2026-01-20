@@ -58,8 +58,10 @@ void setup() {
   /* disable_sdp(); */
   /* Serial.println(" done"); */
 
+  // Dump
   printContents();
-  Serial.print("Programming ...");
+  // Programming
+  Serial.print("Programming ... ");
   for (word address = 0; (address < sizeof(data)); address++) {
     // Wait after each TBLCO (Byte Load Cycle Time)
     if (address != 0 && address % 128 == 0) {
@@ -73,8 +75,23 @@ void setup() {
   for (word address = sizeof(data); address % 16 != 0; address++) {
     writeEEPROM(address, 0x00); // NOP = 0x00
   }
-  Serial.println(" done");
+  Serial.println("done");
   delay(100);
+  // Validation
+  Serial.print("Validating...");
+  byte okvalidation = 0;
+  for (word address = 0; address < sizeof(data); address++) {
+    if (readEEPROM(address) != data[address]) {
+      okvalidation = 1;
+      break;
+    }
+  }
+  if (okvalidation != 0) {
+    Serial.println("FAIL");
+  } else {
+    Serial.println("OK");
+  }
+  // Dump
   printContents();
 }
 
