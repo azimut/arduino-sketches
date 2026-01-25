@@ -29,7 +29,6 @@ void writeEEPROM(int addr, byte wdata) {
   PORTA = wdata;
   delayMicroseconds(1);
   digitalWrite(WE, HIGH);
-  /* delay(10); */
 }
 
 byte readEEPROM(int addr) {
@@ -76,7 +75,7 @@ void setup() {
     writeEEPROM(address, 0x00); // NOP = 0x00
   }
   Serial.println("done");
-  delay(100);
+  delay(500);
   // Validation
   Serial.print("Validating...");
   byte okvalidation = 0;
@@ -112,8 +111,6 @@ void printContents() {
   }
 }
 
-/*
-
 void disable_sdp() {
   digitalWrite(OE, HIGH);
   DDRA = 0xff;
@@ -135,5 +132,3 @@ void setByte(int addr, byte data) {
   delayMicroseconds(1);
   digitalWrite(WE, HIGH);
 }
-
-*/
